@@ -1,0 +1,15 @@
+<div id="chart">
+  <angular-d3-bar [id]="test2" [data]="barChartData" [dataColumns]="dataColumns" [colors]="colors" [yAxisTicks]=10
+    [width]=400 [height]=200 [transitionDuration]=1000 [transitionDelay]=30 [barWidth]="'16px'"></angular-d3-bar>
+</div>
+
+
+<div>
+  <input type="number" [(ngModel)]="startVal" placeholder="startval" />
+  <input type="number" [(ngModel)]="endVal" placeholder="endval" />
+  <input type="number" [(ngModel)]="interval" placeholder="Interval" />
+</div>
+<div>
+  <div>
+    <button (click)="creategraph()">Submit</button>
+  </div>
