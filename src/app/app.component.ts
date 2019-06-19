@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WebsocketService } from './websocket.service';
 import { data } from './data';
 import * as $ from 'jquery';
 import { bar } from './bardata';
 import { Chart } from 'chart.js';
+import { Subscription } from "rxjs";
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,6 +19,8 @@ export class AppComponent implements OnInit {
   value: Array<data>;
   chartArray: any;
   displayData: any;
+
+  your_subscription: any;
 
   constructor(private webSocketService: WebsocketService) {
     this.value = [];
@@ -39,6 +43,7 @@ export class AppComponent implements OnInit {
      value3: 10,
    }]*/
   public barChartData = [];
+  public array2 = []
 
   ngOnInit() {
     const a = [1, 2, 3, 4, 5];
@@ -64,7 +69,7 @@ export class AppComponent implements OnInit {
                 display: false
               },
 
-              labels: ['a', 'b', 'c', 'd', 'e'],
+              labels: this.array2
             }
           ]
         },
@@ -99,7 +104,15 @@ export class AppComponent implements OnInit {
     // });
   }
 
+  ngOnDestroy() {
+    this.your_subscription.unsubscribe();
+  }
+
   creategraph() {
+    if (this.your_subscription != undefined) {
+      this.your_subscription.unsubscribe();
+      console.log("killed a subscription");
+    }
     let values = {
       start_val: parseInt(this.startVal, 10),
       end_val: parseInt(this.endVal, 10),
@@ -107,7 +120,7 @@ export class AppComponent implements OnInit {
     };
     console.log('VAL', this.startVal);
     this.webSocketService.emit('test', values);
-    this.webSocketService.listen('response').subscribe(data => {
+    this.your_subscription = this.webSocketService.listen('response').subscribe(data => {
       console.log("received response");
       console.log("This is what we are looking at", data);
 
@@ -115,18 +128,15 @@ export class AppComponent implements OnInit {
 
 
 
-
-      this.displayData = data;
-      console.log(this.displayData);
+      /*this.displayData = data;
+      console.log(this.displayData);*/
     });
-
 
   }
   updategraph(data) {
     this.barChartData = [];
-    this.chartArray.destroy();
-    this.ngOnInit();
 
+    console.log("function to update graph is running");
 
     // for (let i = 0; i < values.length; i++) {
     //   this.norm = {
@@ -136,32 +146,34 @@ export class AppComponent implements OnInit {
     //   };
     //   this.barChartData.push(this.norm);
     // }
-    for (let x = 0; x < data.length; x++) {
-      console.log("value of x outsite", x);
-      setTimeout(() => {
 
+    var length = data.length;
+
+
+    for (let i = 1; i <= length; i++) {
+      this.array2.push(i);
+
+    }
+
+    var y = 0;
+    for (let x = 0; x < data.length; ++x) {
+      setTimeout(() => {
         this.chartArray.data.datasets.forEach((dataset) => {
+
+          console.log(data[x]);
           dataset.data.push(data[x]);
-          console.log(dataset.data)
-          console.log("value inside timeout", x);
-          console.log(this.chartArray.data.datasets[0].data);
+          //   this.barChartData.push(data[x])
 
         });
 
-
         this.chartArray.update();
 
-      }, 1000 * (x + 1));
-      var add = this.chartArray.data.datasets[0].data;
-      let z = (add) => add.filter((v, i) => add.indexOf(v) === i)
-      console.log("value of x", z);
+
+      }, (1000 * (x + 1)));
 
     }
-    console.log("outside for");
-    console.log("without filter", this.chartArray.data.datasets[0].data);
-
-
-
+    //Graph getting redraw here
+    this.ngOnInit();
   }
 
   /*removedata(data) {
