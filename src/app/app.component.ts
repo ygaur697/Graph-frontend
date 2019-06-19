@@ -3,10 +3,14 @@ import { WebsocketService } from './websocket.service';
 import { data } from './data';
 import * as $ from 'jquery';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { bar } from './bardata';
 import { Chart } from 'chart.js';
 import { Subscription } from "rxjs";
 
+=======
+import { bar } from './bardata'
+>>>>>>> parent of 15daf9c... added chart js
 =======
 import { bar } from './bardata'
 >>>>>>> parent of 15daf9c... added chart js
@@ -99,6 +103,9 @@ export class AppComponent implements OnInit {
 
     }
     console.log(this.barChartData);
+<<<<<<< HEAD
+>>>>>>> parent of 15daf9c... added chart js
+=======
 >>>>>>> parent of 15daf9c... added chart js
 
   }
@@ -107,8 +114,11 @@ export class AppComponent implements OnInit {
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> parent of 15daf9c... added chart js
 =======
 >>>>>>> parent of 15daf9c... added chart js
 }
